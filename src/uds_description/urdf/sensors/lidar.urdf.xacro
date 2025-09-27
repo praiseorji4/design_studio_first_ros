@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="lidar_mass" value="0.10321" />
+  <xacro:property name="lidar_length" value="0.035" />
+  <xacro:property name="lidar_width" value="0.035" />
+  <xacro:property name="lidar_height" value="0.035" />
+  <xacro:property name="com_x" value="-0.000082" />     <!--Center of Mass-->
+  <xacro:property name="com_y" value="-0.000041" /> 
+  <xacro:property name="com_z" value="0.010541" /> 
+  <xacro:property name="stand_height" value="${lidar_height}" /> 
+
+
+
+  <xacro:macro name="lidar_sensor" params="prefix z_off">
+    <link name="lidar_stand_link">
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${0.5*lidar_length} ${0.5*lidar_width} ${stand_height}"/>
+        </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1.0"/>
+        </material>
+      </visual>
+
+      <!-- <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${0.5*lidar_length} ${0.5*lidar_width} ${0.5*lidar_height}"/>
+        </geometry>
+      </collision> -->
+
+      <inertial>
+          <origin xyz="${com_x} ${com_y} ${com_z}" rpy="0 0 0"/>
+          <mass value="${base_mass}"/>
+          <inertia ixx="${(1/12) * lidar_mass * ((lidar_width * lidar_width) + (lidar_height * lidar_height))}"  ixy="0.0"  ixz="0.0"  
+                    iyy="${(1/12) * lidar_mass * ((lidar_length * lidar_length) + (lidar_height * lidar_height))}"  iyz="0.0" 
+                    izz="${(1/12) * lidar_mass * ((lidar_length * lidar_length) + (lidar_width * lidar_width))}"/>
+      </inertial>
+    </link>
+
+    <joint name="$lidar_stand_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="lidar_stand_link"/>
+      <origin xyz="0 0 ${stand_height/2 + 0.04 + 0.002}" rpy="0 0 0"/>  <!-- 1/2 stand_height + stud_length + width of chasis-->
+    </joint>
+    <link name="lidar_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <!-- <geometry>
+          <mesh filename="file://$(find uds_description)/meshes/lidar.stl" scale="0.001 0.001 0.001"/>
+        </geometry> -->
+        <geometry>
+          <cylinder radius="${lidar_width/2}" length="${lidar_height/2}"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 0.5"/>
+        </material>
+      </visual>
+
+      <!-- <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${lidar_width/2}" length="${lidar_height}"/>
+        </geometry>
+      </collision> -->
+
+      <inertial>
+          <origin xyz="${com_x} ${com_y} ${com_z}" rpy="0 0 0"/>
+          <mass value="${lidar_mass*1.25}"/>
+          <inertia ixx="${(1/12) * lidar_mass * ((lidar_width * lidar_width) + (lidar_height * lidar_height))}"  ixy="0.0"  ixz="0.0"  
+                    iyy="${(1/12) * lidar_mass * ((lidar_length * lidar_length) + (lidar_height * lidar_height))}"  iyz="0.0" 
+                    izz="${(1/12) * lidar_mass * ((lidar_length * lidar_length) + (lidar_width * lidar_width))}"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}lidar_joint" type="fixed">
+      <parent link="lidar_stand_link"/>
+      <child link="lidar_link"/>
+      <origin xyz="0 0 ${stand_height/2 + lidar_height/4}" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <gazebo reference="lidar_link">
+      <sensor name="laser" type="gpu_lidar">
+         <pose> 0 0 0 0 0 0 </pose>
+         <always_on>true</always_on>
+         <visualize>true</visualize>
+         <update_rate>10</update_rate>
+         <topic>scan</topic>
+         <gz_frame_id>lidar_link</gz_frame_id>
+         <lidar>
+            <scan>
+               <horizontal>
+               <samples>360</samples>
+               <min_angle>-3.14</min_angle>
+               <max_angle>3.14</max_angle>
+               </horizontal>
+            </scan>
+            <range>
+               <min>0.3</min>
+               <max>12</max>
+            </range>
+         </lidar>
+      </sensor>
+   </gazebo>
+</robot>

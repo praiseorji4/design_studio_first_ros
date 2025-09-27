@@ -1,0 +1,33 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+log/
+
+# VS Code
+src/.vscode/
+src/log
+# ROS2 colcon build artifacts
+build/
+install/
+log/
+devel/
+
+# Compiled binaries
+*.o
+*.so
+*.a
+*.out
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+

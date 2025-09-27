@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:property name="stud_radius" value="0.001375" />
+<xacro:property name="stud_height" value="0.04" />
+<xacro:property name="stud_mass" value="0.1" />
+<xacro:property name="stud_xoff_front" value="0.078" />
+<xacro:property name="stud_xoff_back" value="0.1" />
+<xacro:property name="stud_yoff" value="0.04" />
+
+
+<xacro:macro name="back_uds_stud" params="prefix side x_reflect y_reflect">
+    <link name="${prefix}${side}_stud_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${stud_radius}" length="${stud_height}"/>
+        </geometry>
+        <material name="dark_gray">
+          <color rgba="0.2 0.2 0.2 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${stud_radius}" length="${stud_height}"/>
+        </geometry>
+      </collision>
+
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="${stud_mass}"/>
+            <inertia
+            ixx="${(stud_mass/12.0) * (3*stud_radius*stud_radius + stud_height*stud_height)}" ixy="0" ixz="0"
+            iyy="${(stud_mass/2.0) * (stud_radius*stud_radius)}" iyz="0"
+            izz="${(stud_mass/12.0) * (3*stud_radius*stud_radius + stud_height*stud_height)}"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}${side}_stud_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}${side}_stud_link"/>
+      <origin xyz="${x_reflect*stud_xoff_back} ${y_reflect*stud_yoff + 1.5*stud_radius} ${wheel_radius}" rpy="0 0 0"/>
+    </joint>
+</xacro:macro>
+
+
+<xacro:macro name="front_uds_stud" params="prefix side x_reflect y_reflect">
+    <link name="${prefix}${side}_stud_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${stud_radius}" length="${stud_height}"/>
+        </geometry>
+        <material name="dark_gray">
+          <color rgba="0.2 0.2 0.2 0.5"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${stud_radius}" length="${stud_height}"/>
+        </geometry>
+      </collision>
+
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="${stud_mass}"/>
+            <inertia
+            ixx="${(stud_mass/12.0) * (3*stud_radius*stud_radius + stud_height*stud_height)}" ixy="0" ixz="0"
+            iyy="${(stud_mass/2.0) * (stud_radius*stud_radius)}" iyz="0"
+            izz="${(stud_mass/12.0) * (3*stud_radius*stud_radius + stud_height*stud_height)}"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}${side}_stud_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}${side}_stud_link"/>
+      <origin xyz="${x_reflect*stud_xoff_front} ${y_reflect*stud_yoff} ${wheel_radius}" rpy="0 0 0"/>
+    </joint>
+</xacro:macro>
+</robot>

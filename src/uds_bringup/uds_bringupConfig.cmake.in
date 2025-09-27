@@ -1,0 +1,14 @@
+# - Config file for the uds_bringup package
+# It defines the following variables
+#  uds_bringup_INCLUDE_DIRS - include directories for FooBar
+#  uds_bringup_LIBRARIES    - libraries to link against
+#  uds_bringup_EXECUTABLE   - the bar executable
+
+set(uds_bringup_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${uds_bringup_DIR}/export_uds_bringup.cmake")
+
+# These are IMPORTED targets created by uds_bringupTargets.cmake
+
+

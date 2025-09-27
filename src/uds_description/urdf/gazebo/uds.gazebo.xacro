@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<robot name="uds_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- bot Wheels -->
+    <gazebo reference="right_wheel_link">
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
+    </gazebo>
+
+    <gazebo reference="left_wheel_link">
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
+    </gazebo>
+
+    <!-- Caster Wheels -->
+    <gazebo reference="castor_link">
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+    </gazebo>
+
+    <!-- <gazebo reference="back_castor_link">
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <minDepth>0.001</minDepth>
+        <maxVel>1.0</maxVel>
+    </gazebo> -->
+
+    <!-- bot Sensors -->
+    <!-- 2D Laser Sensor -->
+   <gazebo reference="laser_link">
+      <sensor name="laser" type="gpu_lidar">
+         <pose> 0 0 0 0 0 0 </pose>
+         <always_on>true</always_on>
+         <visualize>true</visualize>
+         <update_rate>10</update_rate>
+         <topic>scan</topic>
+         <gz_frame_id>laser_link</gz_frame_id>
+         <lidar>
+            <scan>
+               <horizontal>
+               <samples>360</samples>
+               <min_angle>-3.14</min_angle>
+               <max_angle>3.14</max_angle>
+               </horizontal>
+            </scan>
+            <range>
+               <min>0.3</min>
+               <max>12</max>
+            </range>
+         </lidar>
+      </sensor>
+   </gazebo>
+
+
+    <gazebo>
+        <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(find uds_bringup)/config/uds_controller.yaml</parameters>
+        </plugin>
+        <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+    </gazebo>
+</robot>
