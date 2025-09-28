@@ -1,0 +1,9 @@
+<library path="uds_hardware">
+  <class name="uds_hardware/DiffDriveUdsHardware"
+         type="uds_hardware::DiffDriveUdsHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Diff drive hardware interface for UDS robot
+    </description>
+  </class>
+</library>

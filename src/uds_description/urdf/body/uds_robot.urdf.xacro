@@ -13,9 +13,9 @@
     <xacro:include filename="$(find uds_description)/urdf/sensors/lidar.urdf.xacro"/>
     <xacro:include filename="$(find uds_description)/urdf/body/uds_wheel.urdf.xacro"/>
     <xacro:include filename="$(find uds_description)/urdf/body/uds_castor.urdf.xacro"/>
-    <xacro:include filename="$(find uds_description)/urdf/gazebo/gazebo_control.xacro"/> 
+    <!-- <xacro:include filename="$(find uds_description)/urdf/gazebo/gazebo_control.xacro"/>  -->
     <!-- <xacro:include filename="$(find uds_description)/urdf/gazebo/uds.gazebo.xacro"/> -->
-    <!-- <xacro:include filename="$(find uds_description)/urdf/ros2_control/uds_ros2_control.xacro"/> -->
+    <xacro:include filename="$(find uds_description)/urdf/ros2_control/uds_ros2_control.xacro"/>
 
     <!-- <xacro:include filename="$(find uds_description)/urdf/sensors/rgbd_camera.urdf.xacro"/>
    

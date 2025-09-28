@@ -15,7 +15,7 @@
     <link name="${prefix}base_link">
         <visual>
             <geometry>
-                <mesh filename="file://$(find uds_description)/meshes/assembled.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://uds_description/meshes/assembled.stl" scale="0.001 0.001 0.001"/>
             </geometry>
             <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
             <material name="white">

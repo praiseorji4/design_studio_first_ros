@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
-#define ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
+#ifndef UDS_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#define UDS_HARDWARE__DIFFBOT_SYSTEM_HPP_
 
 #include <memory>
 #include <string>
@@ -30,24 +30,56 @@
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 
-namespace ros2_control_demo_example_2
+#include "uds_hardware/arduino_comms.hpp"
+#include "uds_hardware/wheel.hpp"
+
+namespace uds_hardware
 {
-class DiffBotSystemHardware : public hardware_interface::SystemInterface
+class DiffDriveUdsHardware : public hardware_interface::SystemInterface
 {
+struct Config
+{
+  std::string left_wheel_name = "";
+  std::string right_wheel_name = "";
+  float loop_rate = 0.0;
+  std::string device = "";
+  int baud_rate = 0;
+  int timeout_ms = 0;
+  int enc_counts_per_rev = 0;
+  int pid_p = 0;
+  int pid_d = 0;
+  int pid_i = 0;
+  int pid_o = 0;
+};
+
 public:
-  RCLCPP_SHARED_PTR_DEFINITIONS(DiffBotSystemHardware)
+  RCLCPP_SHARED_PTR_DEFINITIONS(DiffDriveUdsHardware);
+
 
   hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
+    const hardware_interface::HardwareComponentInterfaceParams & params) override;  // CHANGED: was HardwareInfo & info
 
+
+  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+
+  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+
+ 
   hardware_interface::CallbackReturn on_configure(
     const rclcpp_lifecycle::State & previous_state) override;
+
+
+  hardware_interface::CallbackReturn on_cleanup(
+    const rclcpp_lifecycle::State & previous_state) override;
+
 
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
 
+
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
+
 
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
@@ -56,11 +88,12 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  // Parameters for the DiffBot simulation
-  double hw_start_sec_;
-  double hw_stop_sec_;
+  ArduinoComms comms_;
+  Config cfg_;
+  Wheel wheel_l_;
+  Wheel wheel_r_;
 };
 
-}  // namespace ros2_control_demo_example_2
+} // namespace uds_hardware
 
-#endif  // ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
+#endif // UDS_HARDWARE__DIFFBOT_SYSTEM_HPP_
