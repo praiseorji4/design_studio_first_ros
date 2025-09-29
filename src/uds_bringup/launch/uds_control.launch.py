@@ -19,6 +19,12 @@ from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch.actions import IncludeLaunchDescription
+from ament_index_python.packages import get_package_share_directory
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+
+
+
 
 
 def generate_launch_description():
@@ -96,12 +102,19 @@ def generate_launch_description():
         )
     )
 
+    ordlidar_launch = IncludeLaunchDescription(
+    launch_description_source=PythonLaunchDescriptionSource([
+        FindPackageShare('uds_bringup'), "launch", "ms200_scan.launch.py"
+    ])
+    )
+
     nodes = [
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
+        ordlidar_launch
     ]
 
     return LaunchDescription(nodes)
