@@ -103,16 +103,16 @@ def generate_launch_description():
     )
 
     ordlidar_launch = IncludeLaunchDescription(
-    launch_description_source=PythonLaunchDescriptionSource([
-        FindPackageShare('oradar_lidar'), "launch", "ms200_scan.launch.py"
-    ])
+        PythonLaunchDescriptionSource(
+            [PathJoinSubstitution([FindPackageShare("oradar_lidar"), "launch", "ms200_scan.launch.py"])]
+        )
     )
 
     nodes = [
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
+        # delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
         ordlidar_launch
     ]
